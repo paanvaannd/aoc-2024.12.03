@@ -12,4 +12,4 @@ Given a long string that contains a target string of a given pattern (i.e., "mul
 
 ## Puzzle 2
 
-**TBD**: Pending completion of Puzzle 1.
+In each line of corrupted commands, there are switch statements (`do()` and `don't()`, specifically) that signal to the interpreting program whether the `mul()` commands that follow should or should not be interpreted, respectively. Subsequent calls to `do()` or `don't()` toggle the evaluation of subsequent `mul()` commands.
