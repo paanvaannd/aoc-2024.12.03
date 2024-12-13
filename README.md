@@ -1,2 +1,15 @@
-# aoc-2024.12.03
-Advent of Code 2024, Day 3
+# Mull It Over
+
+_Advent of Code 2024, Day 3_
+
+**Status**:
+
+_WIP: Please check back later!_
+
+## Puzzle 1
+
+Given a long string that contains a target string of a given pattern (i.e., "mul(<integer>, <integer>)") with other characters including letters, numbers, and symbols, find and extract all target strings in the input. Taking those extracted strings, multiply the integers that are part of the matched target string. For each input to the program, sum all products of the aforementioned multiplication operations and output this total sum.
+
+## Puzzle 2
+
+**TBD**: Pending completion of Puzzle 1.
