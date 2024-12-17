@@ -5,7 +5,7 @@ import os
 import re
 
 # Type aliases
-sanity = tuple[str, ...]
+sanity = list[str]
 
 # Globals
 SCRIPT_PATH = os.path.abspath(__file__)
@@ -19,37 +19,41 @@ def read_data_file(filename: str) -> str:
         return _file.read()
 
 
-def parse_input(corpus: str) -> list[str]:
-    return corpus.splitlines()
+def please_do(gobbledygook: str) -> str:
+    _segments = re.split(r"(?=do(?:n't)?\(\))", gobbledygook)
+    _gobbledygook_sans_negatives = [_segment for _segment in _segments
+                                    if _segment.startswith("do()")
+                                    or _segment == _segments[0]]
+    return "".join(_gobbledygook_sans_negatives)
 
 
 def make_sense_of(gobbledygook: str) -> sanity:
-    return tuple(re.findall(r"mul\(\d+,\d+\)", gobbledygook))
+    return re.findall(r"mul\(\d+,\d+\)", gobbledygook)
 
 
-def extract_multiplicands(cmd: str) -> tuple[int, ...]:
-    return tuple(int(multiplicand)
-                 for multiplicand in tuple(re.findall(r"\d+", cmd)))
+def extract_multiplicands(cmd: str) -> list[int]:
+    return [int(multiplicand) for multiplicand in re.findall(r"\d+", cmd)]
 
 
 def mul(first: int, second: int) -> int:
     return first * second
 
 
-def sum_products(products: tuple[int, ...]) -> int:
-    return sum(products)
+def sum_products(data: str) -> int:
+    _cmds = make_sense_of(data)
+    _products = [mul(*extract_multiplicands(_cmd)) for _cmd in _cmds]
+    return sum(_products)
 
 
 def main() -> None:
-    _corpus = read_data_file("scrambled_cmds.txt")
-    _data = parse_input(_corpus)
+    _data = read_data_file("scrambled_cmds.txt").replace("\n", "")
 
     print("\nPart 1\n------")
-    _cmds_per_line = tuple(make_sense_of(_line) for _line in _data)
-    _products_per_line = tuple(tuple(mul(*extract_multiplicands(_cmd)) for _cmd in _line)
-                               for _line in _cmds_per_line)
-    _total_per_line = tuple(sum(_line) for _line in _products_per_line)
-    print(f"The total number of safe reports is  {sum(_total_per_line):,}.")
+    print(f"The sum of all mul() products is {sum_products(_data):,}.")
+
+    print("\nPart 2\n------")
+    _data_trimmed = please_do(_data)
+    print(f"The sum of all toggled mul() products is {sum_products(_data_trimmed):,}.")
 
 
 if __name__ == "__main__":
